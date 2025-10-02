@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khushi - Astronaut Mental Health AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(239, 68, 68, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ef4444;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .real-time-data {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .time-widget {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.6);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+            box-shadow: 0 6px 25px rgba(6, 182, 212, 0.6);
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .card h2 {
+            color: #8b5cf6;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .astronaut-container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .astronaut-3d {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #robotContainer {
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: grab;
+        }
+
+        #robotContainer:active {
+            cursor: grabbing;
+        }
+
+        .voice-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .voice-btn {
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .voice-btn.active {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .speech-bubble {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid #8b5cf6;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            position: relative;
+        }
+
+        .speech-bubble:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #8b5cf6;
+        }
+
+        .typing-indicator {
+            display: none;
+            gap: 5px;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            margin: 10% auto;
+            padding: 30px;
+            border: 2px solid #ef4444;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 50px rgba(239, 68, 68, 0.5);
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            color: #ef4444;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-body {
+            color: #94a3b8;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .modal-close {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .emotion-btn {
+            padding: 5px 12px;
+            border: 1px solid;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+
+        .emotion-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .file-upload-zone {
+            border: 2px dashed #8b5cf6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-zone:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: #06b6d4;
+        }
+
+        .file-upload-zone.dragover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #22c55e;
+        }
+
+        #audioFileInput {
+            display: none;
+        }
+
+        /* Additional styles for other screens remain the same */
+        .face-container, .metrics-grid, .dashboard-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .face-container {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .metrics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .face-card, .metric-card, .info-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .face-card:hover, .metric-card:hover, .info-card:hover {
+            transform: translateY(-5px);
+            border-color: #8b5cf6;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .face-box {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+        }
+
+        .face-box.happy { border-color: #22c55e; box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+        .face-box.sad { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+        .face-box.stressed { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pulse-anim {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Microphone Permission Modal -->
+    <div id="micModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                🎤 Microphone Access Options
+            </div>
+            <div class="modal-body">
+                <p><strong>Khushi AI needs audio input to interact with you.</strong></p>
+                <br>
+                <p><strong>Option 1: Live Microphone (Recommended)</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Click "Allow" when prompted by your browser</li>
+                    <li>Enable microphone in browser settings if blocked</li>
+                    <li>Real-time voice interaction</li>
+                </ul>
+                <br>
+                <p><strong>Option 2: Upload Audio File</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Record audio on your device</li>
+                    <li>Upload the file for processing</li>
+                    <li>Works without microphone permission</li>
+                </ul>
+            </div>
+            <button class="modal-close" onclick="requestMicrophoneAccess()">Enable Microphone</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>LIVE MONITORING</span>
+            </div>
+            <h1>🚀 KHUSHI AI</h1>
+            <p>Multimodal AI Assistant for Astronaut Mental Health Monitoring</p>
+            <p style="font-size: 0.9em; margin-top: 10px; color: #64748b;">
+                This is demo screen where the AI bot is going to talk and user can interact with the AI
+            </p>
+            <div class="real-time-data">
+                <div class="time-widget">
+                    <strong>Local Time:</strong> <span id="localTime">--:--:--</span>
+                </div>
+                <div class="time-widget">
+                    <strong>UTC:</strong> <span id="utcTime">--:--:--</span>
+                </div>
+                <div class="time-widget">
+                    <strong>Mission Day:</strong> <span id="missionDay">184</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screens 2-5 remain the same as original -->
+        <div class="screen" id="screen2">
+            <div class="card">
+                <h2>😊 Face Detection & Emotion Recognition</h2>
+                <p style="color: #94a3b8; margin-bottom: 20px;">YOLO-based facial expression analysis</p>
+                <div class="face-container">
+                    <div class="face-card">
+                        <div class="face-box happy">😊</div>
+                        <h3 style="color: #22c55e;">Happy</h3>
+                        <p style="color: #94a3b8;">Confidence: <span id="happyConf">94</span>%</p>
+                    </div>
+                    <div class="face-card">
+                        <div class="face-box sad">😢</div>
+                        <h3 style="color: #3b82f6;">Sad</h3>
+                        <p style="color: #94a3b8;">Confidence: <span id="sadConf">87</span>%</p>
+                    </div>
+                    <div class="face-card">
+                        <div class="face-box stressed">😰</div>
+                        <h3 style="color: #ef4444;">Stressed</h3>
+                        <p style="color: #94a3b8;">Confidence: <span id="stressConf">91</span>%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen" id="screen3">
+            <div class="card">
+                <h2>❤️ Real-Time Health Monitoring</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value pulse-anim" id="heartRate">72</div>
+                        <div style="color: #94a3b8;">Heart Rate (BPM)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="bloodOxygen">98</div>
+                        <div style="color: #94a3b8;">Blood Oxygen (%)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="bodyTemp">36.8</div>
+                        <div style="color: #94a3b8;">Temperature (°C)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="sleepHours">7.2h</div>
+                        <div style="color: #94a3b8;">Sleep Duration</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen" id="screen4">
+            <div class="card">
+                <h2>🎵 Audio Frequency Analysis</h2>
+                <p style="color: #94a3b8;">Voice pattern and emotion detection</p>
+            </div>
+        </div>
+
+        <div class="screen" id="screen5">
+            <div class="card">
+                <h2>📊 Mission Dashboard</h2>
+                <div class="dashboard-grid">
+                    <div class="info-card">
+                        <h3>🚀 Mission Stats</h3>
+                        <p style="color: #94a3b8;">All systems operational</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Configuration
+        const API_URL = 'http://localhost:3000/api';
+        
+        // Global variables
+        let scene, camera, renderer, robot;
+        let leftEye, rightEye, mouthGroup;
+        let isRobotTalking = false;
+        let currentEmotion = 'neutral';
+        let recognition = null;
+        let isListening = false;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let hasGreeted = false;
+
+        // Initialize Three.js Robot
+        function initRobot() {
+            const container = document.getElementById('robotContainer');
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(400, 400);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            // Mouse controls
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                if (isDragging && robot) {
+                    const deltaX = e.clientX - previousMousePosition.x;
+                    const deltaY = e.clientY - previousMousePosition.y;
+                    robot.rotation.y += deltaX * 0.01;
+                    robot.rotation.x += deltaY * 0.01;
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                }
+            });
+
+            container.addEventListener('mouseup', () => { isDragging = false; });
+            container.addEventListener('mouseleave', () => { isDragging = false; });
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const pointLight1 = new THREE.PointLight(0x8b5cf6, 1, 100);
+            pointLight1.position.set(5, 5, 5);
+            scene.add(pointLight1);
+
+            // Create robot
+            robot = new THREE.Group();
+
+            const bodyGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+            const bodyMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                emissive: 0x1a1a2e,
+                shininess: 100
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            robot.add(body);
+
+            const screenGeometry = new THREE.CircleGeometry(1.3, 32);
+            const screenMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0a0e27,
+                emissive: 0x1a1a2e,
+                side: THREE.DoubleSide
+            });
+            const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+            screen.position.z = 1.51;
+            robot.add(screen);
+
+            const eyeGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+            const eyeMaterial = new THREE.MeshPhongMaterial({
+                color: 0x06b6d4,
+                emissive: 0x06b6d4,
+                emissiveIntensity: 0.8
+            });
+            leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.4, 0.3, 1.52);
+            robot.add(leftEye);
+
+            rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial.clone());
+            rightEye.position.set(0.4, 0.3, 1.52);
+            robot.add(rightEye);
+
+            mouthGroup = new THREE.Group();
+            for (let i = 0; i < 10; i++) {
+                const mouthDot = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.05, 8, 8),
+                    new THREE.MeshPhongMaterial({
+                        color: 0x8b5cf6,
+                        emissive: 0x8b5cf6,
+                        emissiveIntensity: 0.6
+                    })
+                );
+                const angle = (i / 9) * Math.PI - Math.PI / 2;
+                mouthDot.position.x = Math.cos(angle) * 0.5;
+                mouthDot.position.y = -0.3 + Math.sin(angle) * 0.2;
+                mouthDot.position.z = 1.52;
+                mouthGroup.add(mouthDot);
+            }
+            robot.add(mouthGroup);
+
+            scene.add(robot);
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (!isDragging) {
+                robot.position.y = Math.sin(Date.now() * 0.001) * 0.1;
+                robot.rotation.y += 0.002;
+            }
+
+            if (Math.random() > 0.98) {
+                leftEye.scale.y = 0.1;
+                rightEye.scale.y = 0.1;
+                setTimeout(() => {
+                    leftEye.scale.y = 1;
+                    rightEye.scale.y = 1;
+                }, 100);
+            }
+
+            if (isRobotTalking) {
+                const talkScale = 1 + Math.sin(Date.now() * 0.02) * 0.3;
+                mouthGroup.children.forEach((dot) => {
+                    dot.scale.set(talkScale, talkScale, talkScale);
+                });
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function setRobotEmotion(emotion) {
+            currentEmotion = emotion;
+            
+            switch(emotion) {
+                case 'happy':
+                    mouthGroup.children.forEach((dot, i) => {
+                        const angle = (i / 9) * Math.PI - Math.PI / 2;
+                        dot.position.y = -0.3 + Math.sin(angle) * 0.3;
+                    });
+                    leftEye.material.color.setHex(0x22c55e);
+                    rightEye.material.color.setHex(0x22c55e);
+                    break;
+                case 'sad':
+                    mouthGroup.children.forEach((dot, i) => {
+                        const angle = (i / 9) * Math.PI + Math.PI / 2;
+                        dot.position.y = -0.5 + Math.sin(angle) * 0.2;
+                    });
+                    leftEye.material.color.setHex(0x3b82f6);
+                    rightEye.material.color.setHex(0x3b82f6);
+                    break;
+                case 'thinking':
+                    leftEye.material.color.setHex(0xf59e0b);
+                    rightEye.material.color.setHex(0xf59e0b);
+                    break;
+                case 'surprised':
+                    leftEye.scale.set(1.5, 1.5, 1.5);
+                    rightEye.scale.set(1.5, 1.5, 1.5);
+                    setTimeout(() => {
+                        leftEye.scale.set(1, 1, 1);
+                        rightEye.scale.set(1, 1, 1);
+                    }, 500);
+                    break;
+                default:
+                    leftEye.material.color.setHex(0x06b6d4);
+                    rightEye.material.color.setHex(0x06b6d4);
+            }
+        }
+
+        function startRobotTalking() {
+            isRobotTalking = true;
+        }
+
+        function stopRobotTalking() {
+            isRobotTalking = false;
+            mouthGroup.children.forEach(dot => {
+                dot.scale.set(1, 1, 1);
+            });
+        }
+
+        // API Functions
+        async function fetchGreeting() {
+            try {
+                const response = await fetch(`${API_URL}/greeting`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayKhushiResponse(data.greeting.text, data.greeting.emotion);
+                    speakText(data.greeting.text);
+                }
+            } catch (error) {
+                console.error('Error fetching greeting:', error);
+                const fallbackGreeting = "Hello! I'm Khushi, your AI companion. How are you feeling today? May I help you?";
+                displayKhushiResponse(fallbackGreeting, 'happy');
+                speakText(fallbackGreeting);
+            }
+        }
+
+        async function handleAudioUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('statusText').textContent = 'Status: Processing audio file...';
+            document.getElementById('statusText').style.color = '#f59e0b';
+            setRobotEmotion('thinking');
+            startRobotTalking();
+
+            const formData = new FormData();
+            formData.append('audio', file);
+
+            try {
+                const response = await fetch(`${API_URL}/upload-audio`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('userText').textContent = data.transcription;
+                    displayKhushiResponse(data.response.text, data.response.emotion);
+                    speakText(data.response.text);
+                    document.getElementById('statusText').textContent = 'Status: Audio processed successfully';
+                    document.getElementById('statusText').style.color = '#22c55e';
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error uploading audio:', error);
+                document.getElementById('statusText').textContent = 'Status: Error processing audio';
+                document.getElementById('statusText').style.color = '#ef4444';
+                displayKhushiResponse('Sorry, I had trouble processing that audio file. Please try again.', 'sad');
+            } finally {
+                stopRobotTalking();
+                event.target.value = '';
+            }
+        }
+
+        // Speech Recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    document.getElementById('statusText').textContent = 'Status: Listening...';
+                    document.getElementById('statusText').style.color = '#22c55e';
+                    document.getElementById('voiceStatus').innerHTML = '<strong>✓ Active</strong><br><span style="color: #94a3b8;">Listening...</span>';
+                };
+
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript + ' ';
+                        }
+                    }
+
+                    if (finalTranscript.trim()) {
+                        document.getElementById('userText').textContent = finalTranscript.trim();
+                        stopListening();
+                        processUserInput(finalTranscript.trim());
+                    }
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    
+                    if (event.error === 'not-allowed' || event.error === 'audio-capture') {
+                        showModal();
+                    }
+                    
+                    document.getElementById('statusText').textContent = 'Status: Error - ' + event.error;
+                    document.getElementById('statusText').style.color = '#ef4444';
+                    isListening = false;
+                };
+
+                recognition.onend = function() {
+                    if (isListening) {
+                        isListening = false;
+                        document.getElementById('listenBtn').classList.remove('active');
+                    }
+                };
+            }
+        }
+
+        async function startListening() {
+            if (!recognition) {
+                showModal();
+                return;
+            }
+
+            if (!isListening) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    stream.getTracks().forEach(track => track.stop());
+                    
+                    recognition.start();
+                    isListening = true;
+                    document.getElementById('listenBtn').classList.add('active');
+                    document.getElementById('userText').textContent = 'Listening...';
+                    startRobotTalking();
+                    setRobotEmotion('thinking');
+                } catch (error) {
+                    showModal();
+                }
+            }
+        }
+
+        function stopListening() {
+            if (recognition && isListening) {
+                recognition.stop();
+                isListening = false;
+                document.getElementById('listenBtn').classList.remove('active');
+                document.getElementById('voiceStatus').innerHTML = '<strong>⏸ Inactive</strong><br><span style="color: #94a3b8;">Click Start</span>';
+                stopRobotTalking();
+            }
+        }
+
+        async function processUserInput(text) {
+            showTypingIndicator();
+
+            try {
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    hideTypingIndicator();
+                    displayKhushiResponse(data.response.text, data.response.emotion);
+                    speakText(data.response.text);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error processing input:', error);
+                hideTypingIndicator();
+                const fallbackResponse = `You said: "${text}". I'm here to support you. How are you feeling today?`;
+                displayKhushiResponse(fallbackResponse, 'happy');
+                speakText(fallbackResponse);
+            }
+        }
+
+        function displayKhushiResponse(text, emotion) {
+            const responseElement = document.getElementById('khushiResponse');
+            setRobotEmotion(emotion);
+            responseElement.textContent = text;
+            responseElement.style.opacity = '1';
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                startRobotTalking();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                utterance.onend = function() {
+                    stopRobotTalking();
+                    setRobotEmotion('neutral');
+                    document.getElementById('statusText').textContent = 'Status: Ready to Listen';
+                    document.getElementById('statusText').style.color = '#8b5cf6';
+                };
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').classList.add('active');
+            document.getElementById('khushiResponse').style.opacity = '0';
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').classList.remove('active');
+        }
+
+        function testEmotion(emotion) {
+            setRobotEmotion(emotion);
+            const messages = {
+                happy: "I'm feeling great! How can I help brighten your day?",
+                sad: "I understand. I'm here for you.",
+                thinking: "Let me think about that...",
+                surprised: "Wow! That's unexpected!"
+            };
+            displayKhushiResponse(messages[emotion], emotion);
+            speakText(messages[emotion]);
+        }
+
+        // Modal functions
+        function showModal() {
+            document.getElementById('micModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('micModal').style.display = 'none';
+        }
+
+        // Request microphone access via backend, then start listening
+        window.requestMicrophoneAccess = async function() {
+            try {
+                await fetch('http://localhost:3000/api/request-microphone', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: 'anonymous' })
+                });
+            } catch (error) {
+                console.error('Error logging microphone request:', error);
+            }
+            closeModal();
+            startListening();
+        }
+
+        // File upload drag and drop
+        window.addEventListener('DOMContentLoaded', function() {
+            const uploadZone = document.getElementById('uploadZone');
+            if (uploadZone) {
+                uploadZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.add('dragover');
+                });
+                uploadZone.addEventListener('dragleave', () => {
+                    uploadZone.classList.remove('dragover');
+                });
+                uploadZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        document.getElementById('audioFileInput').files = files;
+                        handleAudioUpload({ target: { files: files } });
+                    }
+                });
+            }
+        });
+
+        // Navigation
+        function showScreen(screenNum) {
+            const screens = document.querySelectorAll('.screen');
+            const buttons = document.querySelectorAll('.nav-btn');
+            
+            screens.forEach(screen => screen.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('screen' + screenNum).classList.add('active');
+            buttons[screenNum - 1].classList.add('active');
+        }
+
+        // Time updates
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('localTime').textContent = now.toLocaleTimeString();
+            document.getElementById('utcTime').textContent = now.toUTCString().split(' ')[4];
+        }
+        setInterval(updateTime, 1000);
+
+        // Starfield
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starfield.appendChild(star);
+        }
+
+        // Initialize
+        window.addEventListener('load', function() {
+            console.log('Initializing Khushi AI...');
+            initRobot();
+            initSpeechRecognition();
+            updateTime();
+            // Automatically start talking and request microphone/audio
+            setTimeout(() => {
+                testEmotion('happy');
+                startListening();
+                if (!hasGreeted) {
+                    hasGreeted = true;
+                    fetchGreeting();
+                }
+            }, 1200);
+        });
+
+        window.addEventListener('beforeunload', function() {
+            if (recognition && isListening) recognition.stop();
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showScreen(1)">🧑‍🚀 3D Model</button>
+            <button class="nav-btn" onclick="showScreen(2)">😊 Face Detection</button>
+            <button class="nav-btn" onclick="showScreen(3)">❤️ Health Monitor</button>
+            <button class="nav-btn" onclick="showScreen(4)">🎵 Audio Analysis</button>
+            <button class="nav-btn" onclick="showScreen(5)">📊 Dashboard</button>
+        </div>
+
+        <!-- Screen 1: 3D Robot Model with Voice -->
+        <div class="screen active" id="screen1">
+            <div class="card">
+                <h2>🤖 Interactive Voice-Enabled AI Robot (CIMON-Inspired)</h2>
+                <p style="color: #94a3b8; margin-bottom: 30px;">Talk to Khushi using voice or upload audio files. Drag to rotate the 3D model.</p>
+                
+                <div class="astronaut-container">
+                    <div class="astronaut-3d">
+                        <div id="robotContainer"></div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <p style="color: #8b5cf6; font-size: 1.2em;" id="statusText">Status: Ready to Listen</p>
+                            <p style="color: #94a3b8; margin-top: 10px;">Real-time voice interaction enabled</p>
+                        </div>
+                    </div>
+
+                    <div class="voice-panel">
+                        <h3 style="color: #8b5cf6; margin-bottom: 15px;">Voice Interaction Panel</h3>
+                        <div class="voice-controls">
+                            <button class="voice-btn" id="listenBtn" onclick="startListening()">🎤 Start Listening</button>
+                            <button class="voice-btn" onclick="stopListening()">⏹️ Stop</button>
+                        </div>
+                        
+                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                            <p style="color: #94a3b8; font-size: 0.9em;">
+                                <strong>You said:</strong><br>
+                                <span id="userText" style="color: #06b6d4;">Waiting for input...</span>
+                            </p>
+                        </div>
+
+                        <div class="speech-bubble">
+                            <div class="typing-indicator" id="typingIndicator">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                            <p id="khushiResponse" style="color: #fff; line-height: 1.6;">
+                                Initializing...
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                            <p style="color: #22c55e; font-size: 0.9em;" id="voiceStatus">
+                                <strong>⏸ Voice Recognition Inactive</strong><br>
+                                <span style="color: #94a3b8;">Click "Start Listening" to activate</span>
+                            </p>
+                        </div>
+
+                        <div class="file-upload-zone" id="uploadZone" onclick="document.getElementById('audioFileInput').click()">
+                            <p style="color: #8b5cf6; margin-bottom: 10px;">📁 <strong>Alternative: Upload Audio File</strong></p>
+                            <p style="color: #94a3b8; font-size: 0.9em;">Click or drag & drop an audio file here</p>
+                            <p style="color: #64748b; font-size: 0.8em; margin-top: 5px;">Supported: WAV, MP3, WebM, OGG (Max 10MB)</p>
+                            <input type="file" id="audioFileInput" accept="audio/*" onchange="handleAudioUpload(event)">
+                        </div>
+
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 10px;">
+                            <p style="color: #3b82f6; font-size: 0.85em; margin-bottom: 8px;">
+                                <strong>💡 Tips for best results:</strong>
+                            </p>
+                            <ul style="color: #94a3b8; font-size: 0.85em; margin-left: 20px; line-height: 1.8;">
+                                <li>Speak clearly and at normal pace</li>
+                                <li>Allow microphone permission when prompted</li>
+                                <li>Reduce background noise</li>
+                                <li>Or upload pre-recorded audio files</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; border-radius: 10px;">
+                            <p style="color: #8b5cf6; font-size: 0.85em; margin-bottom: 8px;">
+                                <strong>🎭 Try these emotions:</strong>
+                            </p>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button onclick="testEmotion('happy')" class="emotion-btn" style="background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e;">😊 Happy</button>
+                                <button onclick="testEmotion('sad')" class="emotion-btn" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #3b82f6;">😢 Sad</button>
+                                <button onclick="testEmotion('thinking')" class="emotion-btn" style="background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #f59e0b;">🤔 Thinking</button>
+                                <button onclick="testEmotion('surprised')" class="emotion-btn" style="background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6; color: #8b5cf6;">😲 Surprised</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
