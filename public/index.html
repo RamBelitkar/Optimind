@@ -117,21 +117,25 @@
         .nav-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
+            gap: 0;
+            margin: 0 0 0 0;
+            flex-wrap: nowrap;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
         }
 
         .nav-btn {
-            padding: 12px 30px;
+            flex: 1;
+            padding: 16px 0;
             background: linear-gradient(135deg, #8b5cf6, #3b82f6);
             border: none;
-            border-radius: 25px;
+            border-radius: 0;
             color: white;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1.1em;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            box-shadow: none;
         }
 
         .nav-btn:hover {
@@ -141,7 +145,7 @@
 
         .nav-btn.active {
             background: linear-gradient(135deg, #06b6d4, #8b5cf6);
-            box-shadow: 0 6px 25px rgba(6, 182, 212, 0.6);
+            box-shadow: 0 6px 25px rgba(6, 182, 212, 0.2);
         }
 
         .screen {
@@ -163,7 +167,7 @@
             border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 20px;
             padding: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 0px;
             box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
             backdrop-filter: blur(10px);
             transition: all 0.3s;
@@ -396,21 +400,13 @@
             display: none;
         }
 
-        /* Additional styles for other screens remain the same */
-        .face-container, .metrics-grid, .dashboard-grid {
+        .face-container {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
 
-        .face-container {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .metrics-grid {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-
-        .face-card, .metric-card, .info-card {
+        .face-card {
             background: rgba(15, 23, 42, 0.6);
             border: 2px solid rgba(139, 92, 246, 0.4);
             border-radius: 15px;
@@ -418,9 +414,11 @@
             text-align: center;
             transition: all 0.3s;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .face-card:hover, .metric-card:hover, .info-card:hover {
+        .face-card:hover {
             transform: translateY(-5px);
             border-color: #8b5cf6;
             box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
@@ -442,6 +440,57 @@
         .face-box.sad { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
         .face-box.stressed { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
 
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: #8b5cf6;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
         .metric-value {
             font-size: 2.5em;
             font-weight: bold;
@@ -453,12 +502,70 @@
         .pulse-anim {
             animation: pulse 2s infinite;
         }
+
+        .waveform {
+            height: 150px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 20px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .waveform:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .wave-bar {
+            width: 4px;
+            background: linear-gradient(to top, #8b5cf6, #06b6d4);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+            border-color: #8b5cf6;
+        }
+
+        .info-card h3 {
+            color: #8b5cf6;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
     </style>
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
 
-    <!-- Microphone Permission Modal -->
     <div id="micModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -486,6 +593,13 @@
     </div>
 
     <div class="container">
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showScreen(1)">🧑‍🚀 3D Model</button>
+            <button class="nav-btn" onclick="showScreen(2)">😊 Face Detection</button>
+            <button class="nav-btn" onclick="showScreen(3)">❤️ Health Monitor</button>
+            <button class="nav-btn" onclick="showScreen(4)">🎵 Audio Analysis</button>
+            <button class="nav-btn" onclick="showScreen(5)">📊 Dashboard</button>
+        </div>
         <div class="header">
             <div class="live-indicator">
                 <div class="live-dot"></div>
@@ -509,31 +623,113 @@
             </div>
         </div>
 
-        <!-- Screens 2-5 remain the same as original -->
-        <div class="screen" id="screen2">
+        <!-- Screen 1: 3D Robot Model -->
+        <div class="screen active" id="screen1">
             <div class="card">
-                <h2>😊 Face Detection & Emotion Recognition</h2>
-                <p style="color: #94a3b8; margin-bottom: 20px;">YOLO-based facial expression analysis</p>
-                <div class="face-container">
-                    <div class="face-card">
-                        <div class="face-box happy">😊</div>
-                        <h3 style="color: #22c55e;">Happy</h3>
-                        <p style="color: #94a3b8;">Confidence: <span id="happyConf">94</span>%</p>
+                <h2>🤖 Maitri AI Robot</h2>
+                <p style="color: #94a3b8; margin-bottom: 30px;">Talk to Maitri using voice or upload audio files. Drag to rotate the 3D model.</p>
+                
+                <div class="astronaut-container">
+                    <div class="astronaut-3d">
+                        <div id="robotContainer"></div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <p style="color: #8b5cf6; font-size: 1.2em;" id="statusText">Status: Ready to Listen</p>
+                            <p style="color: #94a3b8; margin-top: 10px;">Real-time voice interaction enabled</p>
+                        </div>
                     </div>
-                    <div class="face-card">
-                        <div class="face-box sad">😢</div>
-                        <h3 style="color: #3b82f6;">Sad</h3>
-                        <p style="color: #94a3b8;">Confidence: <span id="sadConf">87</span>%</p>
-                    </div>
-                    <div class="face-card">
-                        <div class="face-box stressed">😰</div>
-                        <h3 style="color: #ef4444;">Stressed</h3>
-                        <p style="color: #94a3b8;">Confidence: <span id="stressConf">91</span>%</p>
+
+                    <div class="voice-panel">
+                        <h3 style="color: #8b5cf6; margin-bottom: 15px;">Voice Interaction Panel</h3>
+                        <div class="voice-controls">
+                            <button class="voice-btn" id="listenBtn" onclick="startListening()">🎤 Start Listening</button>
+                            <button class="voice-btn" onclick="stopListening()">⏹️ Stop</button>
+                        </div>
+                        
+                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                            <p style="color: #94a3b8; font-size: 0.9em;">
+                                <strong>You said:</strong><br>
+                                <span id="userText" style="color: #06b6d4;">Waiting for input...</span>
+                            </p>
+                        </div>
+
+                        <div class="speech-bubble">
+                            <div class="typing-indicator" id="typingIndicator">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                            <p id="khushiResponse" style="color: #fff; line-height: 1.6;">
+                                Hello! I'm Maitri, your AI companion. I'm here to support your mental health during the mission.
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                            <p style="color: #22c55e; font-size: 0.9em;" id="voiceStatus">
+                                <strong>⏸ Voice Recognition Inactive</strong><br>
+                                <span style="color: #94a3b8;">Click "Start Listening" to activate</span>
+                            </p>
+                        </div>
+
+
+
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; border-radius: 10px;">
+                            <p style="color: #8b5cf6; font-size: 0.85em; margin-bottom: 8px;">
+                                <strong>🎭 Try these emotions:</strong>
+                            </p>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button onclick="testEmotion('happy')" class="emotion-btn" style="background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e;">😊 Happy</button>
+                                <button onclick="testEmotion('sad')" class="emotion-btn" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #3b82f6;">😢 Sad</button>
+                                <button onclick="testEmotion('thinking')" class="emotion-btn" style="background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #f59e0b;">🤔 Thinking</button>
+                                <button onclick="testEmotion('surprised')" class="emotion-btn" style="background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6; color: #8b5cf6;">😲 Surprised</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Screen 2: Face Detection -->
+        <div class="screen" id="screen2">
+            <div class="card">
+                <h2>😊 Face Detection & Emotion Recognition</h2>
+                <p style="color: #94a3b8; margin-bottom: 20px;">YOLO-based facial expression analysis with real-time emotion detection</p>
+                <div class="face-container">
+                    <div class="face-card">
+                        <div class="scan-line"></div>
+                        <div class="face-box happy">😊</div>
+                        <h3 style="color: #22c55e;">Happy</h3>
+                        <p style="color: #94a3b8;">Confidence: <span id="happyConf">94</span>%</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="happyBar" style="width: 94%;"></div>
+                        </div>
+                        <p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Positive emotional state detected</p>
+                    </div>
+                    <div class="face-card">
+                        <div class="scan-line"></div>
+                        <div class="face-box sad">😢</div>
+                        <h3 style="color: #3b82f6;">Sad</h3>
+                        <p style="color: #94a3b8;">Confidence: <span id="sadConf">87</span>%</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="sadBar" style="width: 87%;"></div>
+                        </div>
+                        <p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Low mood detected - support initiated</p>
+                    </div>
+                    <div class="face-card">
+                        <div class="scan-line"></div>
+                        <div class="face-box stressed">😰</div>
+                        <h3 style="color: #ef4444;">Stressed</h3>
+                        <p style="color: #94a3b8;">Confidence: <span id="stressConf">91</span>%</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="stressBar" style="width: 91%;"></div>
+                        </div>
+                        <p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Stress indicators detected - intervention suggested</p>
+                        <p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">High stress - relaxation protocol activated</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Health Monitor -->
         <div class="screen" id="screen3">
             <div class="card">
                 <h2>❤️ Real-Time Health Monitoring</h2>
@@ -541,38 +737,173 @@
                     <div class="metric-card">
                         <div class="metric-value pulse-anim" id="heartRate">72</div>
                         <div style="color: #94a3b8;">Heart Rate (BPM)</div>
+                        <p style="color: #22c55e; font-size: 0.8em; margin-top: 5px;">● Normal</p>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value" id="bloodOxygen">98</div>
                         <div style="color: #94a3b8;">Blood Oxygen (%)</div>
+                        <p style="color: #22c55e; font-size: 0.8em; margin-top: 5px;">● Optimal</p>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value" id="bodyTemp">36.8</div>
                         <div style="color: #94a3b8;">Temperature (°C)</div>
+                        <p style="color: #22c55e; font-size: 0.8em; margin-top: 5px;">● Normal</p>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value" id="sleepHours">7.2h</div>
                         <div style="color: #94a3b8;">Sleep Duration</div>
+                        <p style="color: #3b82f6; font-size: 0.8em; margin-top: 5px;">● Good</p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Screen 4: Audio Analysis -->
         <div class="screen" id="screen4">
             <div class="card">
-                <h2>🎵 Audio Frequency Analysis</h2>
-                <p style="color: #94a3b8;">Voice pattern and emotion detection</p>
+                <h2>🎵 Audio Frequency & Mood Analysis</h2>
+                <p style="color: #94a3b8; margin-bottom: 20px;">MFCC & Spectrogram-based voice analysis for emotion detection</p>
+                <h3 style="color: #8b5cf6; margin-bottom: 15px;">Real-time Voice Waveform</h3>
+                <div class="waveform" id="waveform" onclick="toggleWaveform()">
+                    <div class="wave-bar" style="height: 30px;"></div>
+                    <div class="wave-bar" style="height: 50px;"></div>
+                    <div class="wave-bar" style="height: 40px;"></div>
+                    <div class="wave-bar" style="height: 60px;"></div>
+                    <div class="wave-bar" style="height: 35px;"></div>
+                    <div class="wave-bar" style="height: 70px;"></div>
+                    <div class="wave-bar" style="height: 45px;"></div>
+                    <div class="wave-bar" style="height: 55px;"></div>
+                    <div class="wave-bar" style="height: 40px;"></div>
+                    <div class="wave-bar" style="height: 65px;"></div>
+                    <div class="wave-bar" style="height: 50px;"></div>
+                    <div class="wave-bar" style="height: 45px;"></div>
+                    <div class="wave-bar" style="height: 60px;"></div>
+                    <div class="wave-bar" style="height: 35px;"></div>
+                    <div class="wave-bar" style="height: 55px;"></div>
+                    <div class="wave-bar" style="height: 40px;"></div>
+                    <div class="wave-bar" style="height: 50px;"></div>
+                    <div class="wave-bar" style="height: 45px;"></div>
+                    <div class="wave-bar" style="height: 60px;"></div>
+                    <div class="wave-bar" style="height: 40px;"></div>
+                </div>
+                <div class="metrics-grid" style="margin-top: 30px;">
+                    <div class="metric-card">
+                        <div class="metric-value" id="frequency">1250 Hz</div>
+                        <div style="color: #94a3b8;">Dominant Frequency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="voiceEnergy">-18 dB</div>
+                        <div style="color: #94a3b8;">Voice Energy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="clarityScore">78</div>
+                        <div style="color: #94a3b8;">Clarity Score (%)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="audioTime">--:--</div>
+                        <div style="color: #94a3b8;">Last Analysis</div>
+                    </div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 10px; padding: 20px; margin-top: 20px;">
+                    <h3 style="color: #3b82f6; margin-bottom: 10px;">🎯 Detected Mood: <span id="detectedMood">Calm & Focused</span></h3>
+                    <p style="color: #94a3b8;">Voice analysis indicates stable emotional state with positive undertones.</p>
+                    <p style="color: #94a3b8; margin-top: 10px;"><strong>Analysis:</strong> Speech patterns show reduced stress markers, steady pitch variation</p>
+                    <p style="color: #64748b; font-size: 0.9em; margin-top: 10px;">Samples analyzed: <span id="samplesAnalyzed">1,247</span> | Accuracy: <span id="audioAccuracy">94.2</span>%</p>
+                </div>
             </div>
         </div>
 
+        <!-- Screen 5: Dashboard -->
         <div class="screen" id="screen5">
             <div class="card">
-                <h2>📊 Mission Dashboard</h2>
+                <h2>📊 Medical & Routine Data Dashboard</h2>
                 <div class="dashboard-grid">
                     <div class="info-card">
-                        <h3>🚀 Mission Stats</h3>
-                        <p style="color: #94a3b8;">All systems operational</p>
+                        <h3>💊 Medical Expenses</h3>
+                        <div class="info-item">
+                            <span>Supplements</span>
+                            <span style="color: #8b5cf6;">$<span id="supplements">245</span></span>
+                        </div>
+                        <div class="info-item">
+                            <span>Medical Devices</span>
+                            <span style="color: #8b5cf6;">$<span id="devices">1200</span></span>
+                        </div>
+                        <div class="info-item">
+                            <span>Health Monitoring</span>
+                            <span style="color: #8b5cf6;">$<span id="monitoring">340</span></span>
+                        </div>
+                        <div class="info-item" style="border: none;">
+                            <span><strong>Total (Monthly)</strong></span>
+                            <span style="color: #22c55e;"><strong>$<span id="totalExpense">1785</span></strong></span>
+                        </div>
                     </div>
+                    <div class="info-card">
+                        <h3>🗓️ Daily Routine</h3>
+                        <div class="info-item">
+                            <span>Wake Time</span>
+                            <span style="color: #8b5cf6;">06:00 UTC</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Exercise</span>
+                            <span style="color: #8b5cf6;">07:00 - 08:30</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Work Period</span>
+                            <span style="color: #8b5cf6;">09:00 - 17:00</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Recreation</span>
+                            <span style="color: #8b5cf6;">17:30 - 19:00</span>
+                        </div>
+                        <div class="info-item" style="border: none;">
+                            <span>Sleep Time</span>
+                            <span style="color: #8b5cf6;">22:30 UTC</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>🚀 Space Station Activities</h3>
+                        <div class="info-item">
+                            <span>EVA Missions</span>
+                            <span style="color: #8b5cf6;"><span id="evaMissions">3</span> this week</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Experiments Run</span>
+                            <span style="color: #8b5cf6;"><span id="experiments">12</span></span>
+                        </div>
+                        <div class="info-item">
+                            <span>Maintenance Tasks</span>
+                            <span style="color: #8b5cf6;"><span id="maintenance">8</span> completed</span>
+                        </div>
+                        <div class="info-item" style="border: none;">
+                            <span>Communication Logs</span>
+                            <span style="color: #8b5cf6;"><span id="commLogs">45</span> mins/day</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>🎯 Performance Metrics</h3>
+                        <div class="info-item">
+                            <span>Task Completion</span>
+                            <span style="color: #22c55e;"><span id="taskCompletion">96</span>%</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Emotional Stability</span>
+                            <span style="color: #22c55e;" id="emotionalStability">Excellent</span>
+                        </div>
+                        <div class="info-item">
+                            <span>Sleep Quality</span>
+                            <span style="color: #3b82f6;" id="sleepQuality">Good</span>
+                        </div>
+                        <div class="info-item" style="border: none;">
+                            <span>Overall Wellness</span>
+                            <span style="color: #22c55e;"><span id="wellness">8.7</span>/10</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; border-radius: 10px; padding: 20px; margin-top: 30px;">
+                    <h3 style="color: #8b5cf6; margin-bottom: 10px;">🔔 AI Assistant Active</h3>
+                    <p style="color: #94a3b8;">Maitri is continuously monitoring all parameters. Offline-first support enabled.</p>
+                    <p style="color: #94a3b8; margin-top: 10px;"><strong>Next Check-in:</strong> In 2 hours | <strong>Ground Contact:</strong> Available</p>
+                    <p style="color: #64748b; font-size: 0.9em; margin-top: 10px;">System Status: All sensors operational | Last sync: <span id="lastSync">--:--:--</span></p>
                 </div>
             </div>
         </div>
@@ -580,10 +911,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Configuration
-        const API_URL = 'http://localhost:3000/api';
-        
-        // Global variables
         let scene, camera, renderer, robot;
         let leftEye, rightEye, mouthGroup;
         let isRobotTalking = false;
@@ -594,7 +921,6 @@
         let previousMousePosition = { x: 0, y: 0 };
         let hasGreeted = false;
 
-        // Initialize Three.js Robot
         function initRobot() {
             const container = document.getElementById('robotContainer');
             
@@ -607,7 +933,6 @@
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
 
-            // Mouse controls
             container.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -626,7 +951,6 @@
             container.addEventListener('mouseup', () => { isDragging = false; });
             container.addEventListener('mouseleave', () => { isDragging = false; });
 
-            // Lighting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
 
@@ -634,7 +958,6 @@
             pointLight1.position.set(5, 5, 5);
             scene.add(pointLight1);
 
-            // Create robot
             robot = new THREE.Group();
 
             const bodyGeometry = new THREE.SphereGeometry(1.5, 32, 32);
@@ -768,65 +1091,25 @@
             });
         }
 
-        // API Functions
-        async function fetchGreeting() {
-            try {
-                const response = await fetch(`${API_URL}/greeting`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    displayKhushiResponse(data.greeting.text, data.greeting.emotion);
-                    speakText(data.greeting.text);
-                }
-            } catch (error) {
-                console.error('Error fetching greeting:', error);
-                const fallbackGreeting = "Hello! I'm Maitri, your AI companion. How are you feeling today? May I help you?";
-                displayKhushiResponse(fallbackGreeting, 'happy');
-                speakText(fallbackGreeting);
-            }
-        }
-
-        async function handleAudioUpload(event) {
+        function handleAudioUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             document.getElementById('statusText').textContent = 'Status: Processing audio file...';
             document.getElementById('statusText').style.color = '#f59e0b';
             setRobotEmotion('thinking');
-            startRobotTalking();
 
-            const formData = new FormData();
-            formData.append('audio', file);
-
-            try {
-                const response = await fetch(`${API_URL}/upload-audio`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    document.getElementById('userText').textContent = data.transcription;
-                    displayKhushiResponse(data.response.text, data.response.emotion);
-                    speakText(data.response.text);
-                    document.getElementById('statusText').textContent = 'Status: Audio processed successfully';
-                    document.getElementById('statusText').style.color = '#22c55e';
-                } else {
-                    throw new Error(data.error);
-                }
-            } catch (error) {
-                console.error('Error uploading audio:', error);
-                document.getElementById('statusText').textContent = 'Status: Error processing audio';
-                document.getElementById('statusText').style.color = '#ef4444';
-                displayKhushiResponse('Sorry, I had trouble processing that audio file. Please try again.', 'sad');
-            } finally {
-                stopRobotTalking();
+            const mockResponse = "Thank you for sharing that audio. I'm here to support you. How are you feeling?";
+            setTimeout(() => {
+                document.getElementById('userText').textContent = '[Audio file processed]';
+                displayKhushiResponse(mockResponse, 'happy');
+                speakText(mockResponse);
+                document.getElementById('statusText').textContent = 'Status: Ready';
+                document.getElementById('statusText').style.color = '#22c55e';
                 event.target.value = '';
-            }
+            }, 2000);
         }
 
-        // Speech Recognition
         function initSpeechRecognition() {
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -858,8 +1141,6 @@
                 };
 
                 recognition.onerror = function(event) {
-                    console.error('Speech recognition error:', event.error);
-                    
                     if (event.error === 'not-allowed' || event.error === 'audio-capture') {
                         showModal();
                     }
@@ -911,34 +1192,15 @@
             }
         }
 
-        async function processUserInput(text) {
+        function processUserInput(text) {
             showTypingIndicator();
 
-            try {
-                const response = await fetch(`${API_URL}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ message: text })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    hideTypingIndicator();
-                    displayKhushiResponse(data.response.text, data.response.emotion);
-                    speakText(data.response.text);
-                } else {
-                    throw new Error(data.error);
-                }
-            } catch (error) {
-                console.error('Error processing input:', error);
+            setTimeout(() => {
                 hideTypingIndicator();
                 const fallbackResponse = `You said: "${text}". I'm here to support you. How are you feeling today?`;
                 displayKhushiResponse(fallbackResponse, 'happy');
                 speakText(fallbackResponse);
-            }
+            }, 1500);
         }
 
         function displayKhushiResponse(text, emotion) {
@@ -985,7 +1247,6 @@
             speakText(messages[emotion]);
         }
 
-        // Modal functions
         function showModal() {
             document.getElementById('micModal').style.display = 'block';
         }
@@ -994,45 +1255,11 @@
             document.getElementById('micModal').style.display = 'none';
         }
 
-        // Request microphone access via backend, then start listening
-        window.requestMicrophoneAccess = async function() {
-            try {
-                await fetch('http://localhost:3000/api/request-microphone', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: 'anonymous' })
-                });
-            } catch (error) {
-                console.error('Error logging microphone request:', error);
-            }
+        window.requestMicrophoneAccess = function() {
             closeModal();
             startListening();
         }
 
-        // File upload drag and drop
-        window.addEventListener('DOMContentLoaded', function() {
-            const uploadZone = document.getElementById('uploadZone');
-            if (uploadZone) {
-                uploadZone.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    uploadZone.classList.add('dragover');
-                });
-                uploadZone.addEventListener('dragleave', () => {
-                    uploadZone.classList.remove('dragover');
-                });
-                uploadZone.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    uploadZone.classList.remove('dragover');
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        document.getElementById('audioFileInput').files = files;
-                        handleAudioUpload({ target: { files: files } });
-                    }
-                });
-            }
-        });
-
-        // Navigation
         function showScreen(screenNum) {
             const screens = document.querySelectorAll('.screen');
             const buttons = document.querySelectorAll('.nav-btn');
@@ -1044,136 +1271,104 @@
             buttons[screenNum - 1].classList.add('active');
         }
 
-        // Time updates
         function updateTime() {
             const now = new Date();
             document.getElementById('localTime').textContent = now.toLocaleTimeString();
             document.getElementById('utcTime').textContent = now.toUTCString().split(' ')[4];
+            document.getElementById('lastSync').textContent = now.toLocaleTimeString();
         }
         setInterval(updateTime, 1000);
 
-        // Starfield
-        const starfield = document.getElementById('starfield');
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.width = Math.random() * 3 + 'px';
-            star.style.height = star.style.width;
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            starfield.appendChild(star);
+        function toggleWaveform() {
+            updateWaveform();
         }
 
-        // Initialize
-        window.addEventListener('load', function() {
-            console.log('Initializing Maitri AI...');
+        function updateWaveform() {
+            const bars = document.querySelectorAll('.wave-bar');
+            bars.forEach(bar => {
+                bar.style.height = (30 + Math.random() * 50) + 'px';
+            });
+        }
+        setInterval(updateWaveform, 1000);
+
+        function updateDynamicSections() {
+            document.getElementById('happyConf').textContent = 90 + Math.floor(Math.random() * 10);
+            document.getElementById('sadConf').textContent = 80 + Math.floor(Math.random() * 10);
+            document.getElementById('stressConf').textContent = 85 + Math.floor(Math.random() * 10);
+
+            const happy = parseInt(document.getElementById('happyConf').textContent);
+            const sad = parseInt(document.getElementById('sadConf').textContent);
+            const stress = parseInt(document.getElementById('stressConf').textContent);
+            
+            document.getElementById('happyBar').style.width = happy + '%';
+            document.getElementById('sadBar').style.width = sad + '%';
+            document.getElementById('stressBar').style.width = stress + '%';
+
+            document.getElementById('heartRate').textContent = 65 + Math.floor(Math.random() * 15);
+            document.getElementById('bloodOxygen').textContent = 96 + Math.floor(Math.random() * 4);
+            document.getElementById('bodyTemp').textContent = (36.5 + Math.random() * 1.0).toFixed(1);
+            document.getElementById('sleepHours').textContent = (6.0 + Math.random() * 2.0).toFixed(1) + 'h';
+
+            document.getElementById('frequency').textContent = (1000 + Math.floor(Math.random() * 800)) + ' Hz';
+            document.getElementById('voiceEnergy').textContent = (-25 + Math.floor(Math.random() * 15)) + ' dB';
+            document.getElementById('clarityScore').textContent = 70 + Math.floor(Math.random() * 20);
+            document.getElementById('audioAccuracy').textContent = (92 + Math.random() * 6).toFixed(1);
+            document.getElementById('audioTime').textContent = new Date().toLocaleTimeString().slice(0,5);
+            const moods = ['Calm & Focused', 'Energetic & Motivated', 'Relaxed', 'Alert & Engaged', 'Content'];
+            document.getElementById('detectedMood').textContent = moods[Math.floor(Math.random() * moods.length)];
+            document.getElementById('samplesAnalyzed').textContent = (1200 + Math.floor(Math.random() * 200)).toLocaleString();
+
+            document.getElementById('supplements').textContent = 230 + Math.floor(Math.random() * 30);
+            document.getElementById('devices').textContent = 1150 + Math.floor(Math.random() * 100);
+            document.getElementById('monitoring').textContent = 320 + Math.floor(Math.random() * 40);
+            document.getElementById('totalExpense').textContent = parseInt(document.getElementById('supplements').textContent) + parseInt(document.getElementById('devices').textContent) + parseInt(document.getElementById('monitoring').textContent);
+            document.getElementById('experiments').textContent = 10 + Math.floor(Math.random() * 5);
+            document.getElementById('maintenance').textContent = 6 + Math.floor(Math.random() * 5);
+            document.getElementById('commLogs').textContent = 40 + Math.floor(Math.random() * 15);
+            document.getElementById('taskCompletion').textContent = 93 + Math.floor(Math.random() * 7);
+            document.getElementById('wellness').textContent = (8.0 + Math.random() * 1.5).toFixed(1);
+            const emotionalStates = ['Excellent', 'Very Good', 'Good', 'Stable'];
+            const sleepQuality = ['Excellent', 'Good', 'Fair'];
+            document.getElementById('emotionalStability').textContent = emotionalStates[Math.floor(Math.random() * emotionalStates.length)];
+            document.getElementById('sleepQuality').textContent = sleepQuality[Math.floor(Math.random() * sleepQuality.length)];
+        }
+
+        // Create starfield
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                starfield.appendChild(star);
+            }
+        }
+
+        // Initialize everything when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            createStarfield();
             initRobot();
             initSpeechRecognition();
             updateTime();
-            // Automatically start talking and request microphone/audio
-            setTimeout(() => {
-                testEmotion('happy');
-                startListening();
-                if (!hasGreeted) {
-                    hasGreeted = true;
-                    fetchGreeting();
-                }
-            }, 1200);
-        });
+            updateWaveform();
+            updateDynamicSections();
 
-        window.addEventListener('beforeunload', function() {
-            if (recognition && isListening) recognition.stop();
-            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            // Set interval to update dynamic sections every second
+            setInterval(updateDynamicSections, 1000);
+
+            // Greeting if not already done
+            if (!hasGreeted) {
+                setTimeout(() => {
+                    setRobotEmotion('happy');
+                    speakText("Hello! I'm Maitri, your mental health AI companion. How can I assist you today?");
+                    hasGreeted = true;
+                }, 1500);
+            }
         });
     </script>
 </body>
 </html>
-
-        <div class="nav-buttons">
-            <button class="nav-btn active" onclick="showScreen(1)">🧑‍🚀 3D Model</button>
-            <button class="nav-btn" onclick="showScreen(2)">😊 Face Detection</button>
-            <button class="nav-btn" onclick="showScreen(3)">❤️ Health Monitor</button>
-            <button class="nav-btn" onclick="showScreen(4)">🎵 Audio Analysis</button>
-            <button class="nav-btn" onclick="showScreen(5)">📊 Dashboard</button>
-        </div>
-
-        <!-- Screen 1: 3D Robot Model with Voice -->
-        <div class="screen active" id="screen1">
-            <div class="card">
-                <h2>🤖 Interactive Voice-Enabled AI Robot (CIMON-Inspired)</h2>
-                <p style="color: #94a3b8; margin-bottom: 30px;">Talk to Maitri using voice or upload audio files. Drag to rotate the 3D model.</p>
-                
-                <div class="astronaut-container">
-                    <div class="astronaut-3d">
-                        <div id="robotContainer"></div>
-                        <div style="text-align: center; margin-top: 20px;">
-                            <p style="color: #8b5cf6; font-size: 1.2em;" id="statusText">Status: Ready to Listen</p>
-                            <p style="color: #94a3b8; margin-top: 10px;">Real-time voice interaction enabled</p>
-                        </div>
-                    </div>
-
-                    <div class="voice-panel">
-                        <h3 style="color: #8b5cf6; margin-bottom: 15px;">Voice Interaction Panel</h3>
-                        <div class="voice-controls">
-                            <button class="voice-btn" id="listenBtn" onclick="startListening()">🎤 Start Listening</button>
-                            <button class="voice-btn" onclick="stopListening()">⏹️ Stop</button>
-                        </div>
-                        
-                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 10px; padding: 15px; margin: 15px 0;">
-                            <p style="color: #94a3b8; font-size: 0.9em;">
-                                <strong>You said:</strong><br>
-                                <span id="userText" style="color: #06b6d4;">Waiting for input...</span>
-                            </p>
-                        </div>
-
-                        <div class="speech-bubble">
-                            <div class="typing-indicator" id="typingIndicator">
-                                <div class="typing-dot"></div>
-                                <div class="typing-dot"></div>
-                                <div class="typing-dot"></div>
-                            </div>
-                            <p id="khushiResponse" style="color: #fff; line-height: 1.6;">
-                                Initializing...
-                            </p>
-                        </div>
-
-                        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 10px; padding: 15px; margin-top: 15px;">
-                            <p style="color: #22c55e; font-size: 0.9em;" id="voiceStatus">
-                                <strong>⏸ Voice Recognition Inactive</strong><br>
-                                <span style="color: #94a3b8;">Click "Start Listening" to activate</span>
-                            </p>
-                        </div>
-
-                        <div class="file-upload-zone" id="uploadZone" onclick="document.getElementById('audioFileInput').click()">
-                            <p style="color: #8b5cf6; margin-bottom: 10px;">📁 <strong>Alternative: Upload Audio File</strong></p>
-                            <p style="color: #94a3b8; font-size: 0.9em;">Click or drag & drop an audio file here</p>
-                            <p style="color: #64748b; font-size: 0.8em; margin-top: 5px;">Supported: WAV, MP3, WebM, OGG (Max 10MB)</p>
-                            <input type="file" id="audioFileInput" accept="audio/*" onchange="handleAudioUpload(event)">
-                        </div>
-
-                        <div style="margin-top: 15px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 10px;">
-                            <p style="color: #3b82f6; font-size: 0.85em; margin-bottom: 8px;">
-                                <strong>💡 Tips for best results:</strong>
-                            </p>
-                            <ul style="color: #94a3b8; font-size: 0.85em; margin-left: 20px; line-height: 1.8;">
-                                <li>Speak clearly and at normal pace</li>
-                                <li>Allow microphone permission when prompted</li>
-                                <li>Reduce background noise</li>
-                                <li>Or upload pre-recorded audio files</li>
-                            </ul>
-                        </div>
-
-                        <div style="margin-top: 15px; padding: 12px; background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; border-radius: 10px;">
-                            <p style="color: #8b5cf6; font-size: 0.85em; margin-bottom: 8px;">
-                                <strong>🎭 Try these emotions:</strong>
-                            </p>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button onclick="testEmotion('happy')" class="emotion-btn" style="background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e;">😊 Happy</button>
-                                <button onclick="testEmotion('sad')" class="emotion-btn" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #3b82f6;">😢 Sad</button>
-                                <button onclick="testEmotion('thinking')" class="emotion-btn" style="background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #f59e0b;">🤔 Thinking</button>
-                                <button onclick="testEmotion('surprised')" class="emotion-btn" style="background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6; color: #8b5cf6;">😲 Surprised</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
